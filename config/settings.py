@@ -8,6 +8,6 @@ DUMP_DELAY = 0.5  # Delay after dump in seconds
 
 # Dump/Screenshot settings
 DUMP_ON_EACH_STEP = False  # Dump after each successful step (for debugging)
-DUMP_ON_ERROR = False  # Always dump on error (recommended: True)
-DUMP_ON_WAIT = False  # Dump during wait/retry (recommended: True)
+DUMP_ON_ERROR = True  # Always dump on error (recommended: True)
+DUMP_ON_WAIT = True  # Dump during wait/retry (recommended: True)
 

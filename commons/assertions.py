@@ -63,7 +63,8 @@ def assert_element_not_exists(text_contains: str = None, text: str = None,
     Raises:
         AssertionError: If element is found
     """
-    xml_path, _ = dump.dump_ui("assert")
+    # For assertion, we only need XML, not screenshot
+    xml_path, _ = dump.dump_ui("assert", screenshot=False)
     element = find(xml_path, text_contains=text_contains, text=text,
                   resource_id=resource_id, class_name=class_name, tappable=False)
     

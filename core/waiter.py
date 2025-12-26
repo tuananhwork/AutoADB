@@ -86,12 +86,16 @@ class Wait:
         from commons.logger import log_wait, log_success, log_error
         log_wait(f"Looking for element: {search_str} (timeout={self.timeout}s)")
         
+        # Check if screenshot should be taken during wait
+        take_screenshot = settings.DUMP_ON_WAIT
+        
         while True:
             attempt += 1
             elapsed = time.time() - start_time
             log_wait(f"Attempt {attempt} (elapsed: {elapsed:.1f}s)...")
             
-            xml_path, _ = dump.dump_ui("wait")
+            # Only dump XML if DUMP_ON_WAIT=False, skip screenshot to save time
+            xml_path, _ = dump.dump_ui("wait", screenshot=take_screenshot)
             
             # Validate XML file exists and has content
             import os

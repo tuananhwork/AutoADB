@@ -72,7 +72,7 @@ def click_element(description: str, text_contains: str = None,
         should_dump = dump_after if dump_after is not None else settings.DUMP_ON_EACH_STEP
         if should_dump:
             step_name = description.lower().replace(" ", "_").replace("'", "").replace("[", "").replace("]", "")
-            xml_path, screenshot_path = dump.dump_ui(f"step_{step_name}")
+            xml_path, screenshot_path = dump.dump_ui(f"step_{step_name}", screenshot=True)
             log_dump(f"Step completed - XML: {xml_path}, Screenshot: {screenshot_path}")
         
         if wait_after > 0:
@@ -81,7 +81,7 @@ def click_element(description: str, text_contains: str = None,
         # Always dump on error for debugging
         if settings.DUMP_ON_ERROR:
             step_name = description.lower().replace(" ", "_").replace("'", "").replace("[", "").replace("]", "")
-            xml_path, screenshot_path = dump.dump_ui(f"error_{step_name}")
+            xml_path, screenshot_path = dump.dump_ui(f"error_{step_name}", screenshot=True)
             log_error(f"Error occurred - XML: {xml_path}, Screenshot: {screenshot_path}")
         raise
 
