@@ -1,6 +1,7 @@
 """Common setup functions for tests."""
 import time
 from core import app
+from commons.logger import log_setup, log_teardown
 
 
 def setup_app(package: str = None, stabilize_delay: float = 2.0):
@@ -11,17 +12,17 @@ def setup_app(package: str = None, stabilize_delay: float = 2.0):
         package: Package name (uses config default if None)
         stabilize_delay: Seconds to wait after app starts (default: 2.0)
     """
-    print("\n[SETUP] Stop app")
+    log_setup("Stop app")
     app.stop_app()
     
-    print("\n[SETUP] Start app")
+    log_setup("Start app")
     app.start_app(package)
     
     if stabilize_delay > 0:
-        print(f"\n[SETUP] Waiting {stabilize_delay}s for app to stabilize...")
+        log_setup(f"Waiting {stabilize_delay}s for app to stabilize...")
         time.sleep(stabilize_delay)
     
-    print("[SETUP] Setup completed")
+    log_setup("Setup completed")
 
 
 def teardown_app(package: str = None):
@@ -31,7 +32,7 @@ def teardown_app(package: str = None):
     Args:
         package: Package name (uses config default if None)
     """
-    print("\n[TEARDOWN] Stop app")
+    log_teardown("Stop app")
     app.stop_app()
-    print("[TEARDOWN] Teardown completed")
+    log_teardown("Teardown completed")
 

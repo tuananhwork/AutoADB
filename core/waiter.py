@@ -83,19 +83,20 @@ class Wait:
             search_desc.append(f"nth={nth}")
         search_str = ", ".join(search_desc) if search_desc else "any element"
         
-        print(f"[WAIT] Looking for element: {search_str} (timeout={self.timeout}s)")
+        from commons.logger import log_wait, log_success, log_error
+        log_wait(f"Looking for element: {search_str} (timeout={self.timeout}s)")
         
         while True:
             attempt += 1
             elapsed = time.time() - start_time
-            print(f"[WAIT] Attempt {attempt} (elapsed: {elapsed:.1f}s)...")
+            log_wait(f"Attempt {attempt} (elapsed: {elapsed:.1f}s)...")
             
             xml_path, _ = dump.dump_ui("wait")
             
             # Validate XML file exists and has content
             import os
             if not os.path.exists(xml_path) or os.path.getsize(xml_path) == 0:
-                print(f"[WAIT] XML dump failed or empty")
+                log_error("XML dump failed or empty")
                 if time.time() - start_time >= self.timeout:
                     raise TimeoutException(
                         f"XML dump failed or empty after {self.timeout}s "
@@ -110,10 +111,10 @@ class Wait:
             
             if element is not None:
                 display_text = element.get_display_text()[:30] if element.get_display_text() else "(no text)"
-                print(f"[WAIT] ✓ Element found after {elapsed:.1f}s: '{display_text}'")
+                log_success(f"Element found after {elapsed:.1f}s: '{display_text}'")
                 return element
             
-            print(f"[WAIT] ✗ Element not found, retrying in {self.interval}s...")
+            log_wait(f"Element not found, retrying in {self.interval}s...")
             
             if time.time() - start_time >= self.timeout:
                 # Get available texts for debugging

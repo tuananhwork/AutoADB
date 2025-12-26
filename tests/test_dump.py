@@ -1,13 +1,13 @@
 """Example test flow."""
 from commons.setup import setup_app
-from commons.helpers import execute_steps
+from commons.helpers import execute_steps, assert_exists
+from commons.assertions import AssertionError
+from commons.logger import log_section, log_success, log_error
 
 
 def test_dump_flow():
     """Test flow: open app and navigate."""
-    print("=" * 60)
-    print("STARTING TEST FLOW")
-    print("=" * 60)
+    log_section("STARTING TEST FLOW")
     
     # Common setup
     setup_app()
@@ -39,9 +39,15 @@ def test_dump_flow():
     
     execute_steps(steps)
     
-    print("\n" + "=" * 60)
-    print("TEST FLOW COMPLETED")
-    print("=" * 60)
+    # Assertion: Kiểm tra kết quả cuối cùng
+    from commons.logger import log_info
+    log_info("Validating test result...")
+    try:
+        assert_exists(text_contains="Tiếp", timeout=5.0, message="Expected 'Tiếp' button not found")
+        log_section("TEST PASSED", char="=")
+    except AssertionError as e:
+        log_section(f"TEST FAILED: {e}", char="=")
+        raise
 
 
 if __name__ == "__main__":

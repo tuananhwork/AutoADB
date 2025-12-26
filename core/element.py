@@ -48,11 +48,12 @@ class Element:
     
     def click(self) -> None:
         """Click element at center."""
+        from commons.logger import log_click
         x, y = self.center()
         display_text = self.get_display_text()[:30] if self.get_display_text() else "(no text)"
-        print(f"[CLICK] Clicking element at ({x}, {y}) - text: '{display_text}'")
+        log_click(f"Clicking element at ({x}, {y}) - text: '{display_text}'")
         device.tap(x, y)
-        print(f"[CLICK] Click executed")
+        log_click("Click executed")
     
     def exists(self) -> bool:
         """

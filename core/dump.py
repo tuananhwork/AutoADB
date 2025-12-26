@@ -5,6 +5,7 @@ from datetime import datetime
 from typing import Tuple
 from core import adb
 from config import settings
+from commons.logger import log_dump
 
 
 def dump_ui(prefix: str = "dump") -> Tuple[str, str]:
@@ -36,15 +37,15 @@ def dump_ui(prefix: str = "dump") -> Tuple[str, str]:
     screenshot_path = os.path.join(settings.SCREENSHOT_DIR, screenshot_filename)
     
     # Dump UI XML
-    print(f"[DUMP] Dumping UI XML...")
+    log_dump("Dumping UI XML...")
     adb.run(f"shell uiautomator dump {remote_xml}")
     
     # Take screenshot
-    print(f"[DUMP] Taking screenshot...")
+    log_dump("Taking screenshot...")
     adb.run(f"shell screencap -p {remote_screenshot}")
     
     # Pull files
-    print(f"[DUMP] Pulling files...")
+    log_dump("Pulling files...")
     adb.run(f"pull {remote_xml} {xml_path}")
     adb.run(f"pull {remote_screenshot} {screenshot_path}")
     
@@ -52,6 +53,6 @@ def dump_ui(prefix: str = "dump") -> Tuple[str, str]:
     adb.run(f"shell rm {remote_xml}")
     adb.run(f"shell rm {remote_screenshot}")
     
-    print(f"[DUMP] Dump completed: {xml_filename}")
+    log_dump(f"Dump completed: {xml_filename}")
     return xml_path, screenshot_path
 
