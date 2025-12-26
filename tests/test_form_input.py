@@ -1,8 +1,8 @@
 """Test case: Điền form và input text."""
 from commons.setup import setup_app
-from commons.helpers import execute_steps, touch
-from core.waiter import Wait
-from core import device
+from commons.helpers import execute_steps
+from commons.assertions import assert_text_in_dump, AssertionError
+from commons.logger import log_section, log_info
 
 
 def test_form_input():
@@ -15,56 +15,60 @@ def test_form_input():
     - Chọn date/time
     - Submit form
     """
-    print("=" * 60)
-    print("TEST: Form Input")
-    print("=" * 60)
+    log_section("TEST: Form Input")
     
-    setup_app()
-    
-    # Navigate đến form
-    steps = [
-        "Khám phá",
-        "Hậu mãi VinFast",
-        "Đặt lịch dịch vụ",
-        "Bảo dưỡng",
-        "Tiếp theo",
-    ]
-    execute_steps(steps)
-    
-    # Điền form
-    steps = [
-        # Chọn tỉnh/thành phố
-        "Tỉnh/Thành phố",
-        "Đà Nẵng",
-        "Chọn tỉnh",
+    try:
+        setup_app()
         
-        # Chọn xưởng dịch vụ
-        "Chọn xưởng dịch vụ",
-        "VinFast Hải Châu",
+        # Navigate đến form
+        steps = [
+            "Khám phá",
+            "Hậu mãi VinFast",
+            "Đặt lịch dịch vụ",
+            ("Đặt lịch dịch vụ", 1),
+            "Bảo dưỡng",
+            "Tiếp theo",
+        ]
+        execute_steps(steps)
         
-        # Chọn ngày
-        "Chọn ngày",
-        "31",
-        "Lưu thay đổi",
+        # Điền form
+        steps = [
+            # Chọn tỉnh/thành phố
+            "Tỉnh/Thành phố",
+            "Đà Nẵng",
+            "Chọn tỉnh",
+            
+            # Chọn xưởng dịch vụ
+            "Chọn xưởng dịch vụ",
+            "VinFast Hải Châu",
+            
+            # Chọn ngày
+            "Chọn ngày",
+            "31",
+            "Lưu thay đổi",
+            
+            # Chọn giờ
+            "11:00",
+            
+            # Submit
+            "Tiếp",
+        ]
+        execute_steps(steps)
         
-        # Chọn giờ
-        "11:00",
+        # Assertion: Validate form submission
+        log_info("Validating test result...")
+        # After form submission, should see confirmation or next step
+        assert_text_in_dump("Tiếp", timeout=5.0,
+                           message="Test FAILED: Form submission not successful")
         
-        # Input text (nếu có field nhập text)
-        # Note: Hiện tại framework chưa hỗ trợ input text trực tiếp
-        # Có thể dùng adb shell input text "text" nếu cần
+        log_section("TEST PASSED", char="=")
         
-        # Submit
-        "Tiếp",
-    ]
-    execute_steps(steps)
-    
-    # Ví dụ input text bằng ADB (nếu cần)
-    # device.input_text("Hello World")  # Cần implement trong device.py
-    
-    print("\n" + "=" * 60)
-    print("TEST COMPLETED")
-    print("=" * 60)
+    except AssertionError as e:
+        log_section(f"TEST FAILED: {e}", char="=")
+        raise
+    except Exception as e:
+        log_section(f"TEST FAILED: {e}", char="=")
+        raise
 
 
 if __name__ == "__main__":

@@ -25,6 +25,7 @@ def test_assertions():
         touch("Khám phá"),
         touch("Hậu mãi VinFast"),
         touch("Đặt lịch dịch vụ"),
+        touch("Đặt lịch dịch vụ", 1),
         touch("Bảo dưỡng"),
     ]
     execute_steps(steps)

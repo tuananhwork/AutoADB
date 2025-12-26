@@ -48,6 +48,7 @@ def test_dump_debug():
     try:
         steps_with_dump = [
             "Đặt lịch dịch vụ",
+            ("Đặt lịch dịch vụ", 1),
             "Bảo dưỡng",
         ]
         execute_steps(steps_with_dump)
